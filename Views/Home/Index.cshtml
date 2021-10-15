@@ -104,29 +104,35 @@
 
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
-            <div id="ProductContainer" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                @foreach (var item in Model.Products)
-                {
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <img class="card-img-top" src="~/UploadFiles/Products/@item.Image" alt="..." />
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                    <br />
-                                    @Html.DisplayFor(modelItem => item.Description)
-                                    <br />
-                                    @Html.DisplayFor(modelItem => item.Price)₪
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><button id="addToCart" class="btn btn-outline-dark mt-auto" onclick="AddProductToCart(@item.Id, false)">Add to cart</button></div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
+            <table>
+
+
+                <tbody id="ProductContainer" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            
+                            <td class="col mb-5" >
+                                <div class="card h-100">
+                                    <img class="card-img-top" src="~/UploadFiles/Products/@item.Image" alt="..." />
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                            <br />
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                            <br />
+                                            @Html.DisplayFor(modelItem => item.Price)₪
+                                        </div>
+                                    </div>
+                                    <!-- Product actions-->
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                        <div class="text-center"><button id="addToCart" class="btn btn-outline-dark mt-auto" onclick="AddProductToCart(@item.Id, false)">Add to cart</button></div>
+                                    </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
         <center>
             <video controls="controls" autoplay="autoplay">
@@ -165,7 +171,7 @@
 
         function searchListener() {
             $("#search").on("keyup", function () {
-                alert('Success');
+                var text = $("#search").val();
                 var inpSearch = $('#search');//$('input', $(this).parent());//$(this).prev();
                 var loader = $(this).next();
                 loader.removeClass('d-none');
@@ -173,7 +179,7 @@
                     url: "/Home/SearchJson",
                     data: { searchString: inpSearch.val() }
                 }).done(function (result) {
-                    alert('Done');
+                    $('ProductContainer').html(result);
                     var ProductContainer = $('ProductContainer');
                     var template = $('#template').html();
                     ProductContainer.html('');
@@ -194,16 +200,22 @@
 
     <script type="text/template" id="template">
         <tr>
-            <td>
-                ${title}
-            </td>
-            <td>
-                ${body}
-            </td>
-            <td>
-                @*<a href="/Articles/Edit/${id}">Edit</a> |
-                <a href="/Articles/Details/${id}">Details</a> |
-                <a href="/Articles/Delete/${id}">Delete</a>*@
+            class="col mb-5">
+            <td class="card h-100">
+                <img class="card-img-top" src="~/UploadFiles/Products/${Image}" alt="..." />
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        ${Name}
+                        <br />
+                        ${Description}
+                        <br />
+                        ${Price}₪
+                    </div>
+                </div>
+                <!-- Product actions-->
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center"><button id="addToCart" class="btn btn-outline-dark mt-auto" onclick="AddProductToCart(${Id}, false)">Add to cart</button></div>
+                </div>
             </td>
         </tr>
     </script>

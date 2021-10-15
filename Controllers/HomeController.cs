@@ -83,7 +83,6 @@ namespace ApplicationDevelopmentCourseProject.Controllers
 
         public async Task<IActionResult> SearchJson(string searchString)
         {//Check if works
-            Task.Delay(3000).Wait();
 
             var products = from m in _context.Product
                                select m;
