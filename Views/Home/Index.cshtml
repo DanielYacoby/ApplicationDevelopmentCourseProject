@@ -101,130 +101,131 @@
         <canvas id="canvas" width="140" height="140"></canvas>
     </nav>
 
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <table>
 
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <table>
 
+                    <tbody id="ProductContainer" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr>
 
-                <tbody id="ProductContainer" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    @foreach (var item in Model.Products)
-                    {
-                        <tr>
-                            
-                            <td class="col mb-5" >
-                                <div class="card h-100">
-                                    <img class="card-img-top" src="~/UploadFiles/Products/@item.Image" alt="..." />
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            @Html.DisplayFor(modelItem => item.Name)
-                                            <br />
-                                            @Html.DisplayFor(modelItem => item.Description)
-                                            <br />
-                                            @Html.DisplayFor(modelItem => item.Price)₪
+                                <td class="col mb-5">
+                                    <div class="card h-100">
+                                        <img class="card-img-top" src="~/UploadFiles/Products/@item.Image" alt="..." />
+                                        <div class="card-body p-4">
+                                            <div class="text-center">
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                                <br />
+                                                @Html.DisplayFor(modelItem => item.Description)
+                                                <br />
+                                                @Html.DisplayFor(modelItem => item.Price)₪
+                                            </div>
                                         </div>
-                                    </div>
-                                    <!-- Product actions-->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center"><button id="addToCart" class="btn btn-outline-dark mt-auto" onclick="AddProductToCart(@item.Id, false)">Add to cart</button></div>
-                                    </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <center>
-            <video controls="controls" autoplay="autoplay">
-                <source src="~/UploadFiles/Videos/Online-Shopping.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>
-        </center>
-    </section>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="~/js/ShoppingCart.js"></script>
-    <script>
-        function searchListener2() {
-            $("#search").on("keyup", function () {
-                var searched = $(this).val();
-                var loader = $(this).next();
-                loader.removeClass('d-none');
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/Index",
-                    data: { 'searchString': searched },
-                    datatype: "html",
-                    success: function () {
-                        //Index to myself if the ajax succeed.
-                        alert('Success');
-                        $('#productsList').html(data);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus, errorThrown);
-                        alert('Unexpected error.' + textStatus + errorThrown);
-                    }
-                });
-            });
-        }
-
-        function searchListener() {
-            $("#search").on("keyup", function () {
-                var text = $("#search").val();
-                var inpSearch = $('#search');//$('input', $(this).parent());//$(this).prev();
-                var loader = $(this).next();
-                loader.removeClass('d-none');
-                $.ajax({
-                    url: "/Home/SearchJson",
-                    data: { searchString: inpSearch.val() }
-                }).done(function (result) {
-                    $('ProductContainer').html(result);
-                    var ProductContainer = $('ProductContainer');
-                    var template = $('#template').html();
-                    ProductContainer.html('');
-                    $.each(result, function (key, value) {
-                        //tbody.append('<tr><td>' + value.title + '</td><td>' + value.body + '</td></tr>');
-                        var temp = template;
-                        $.each(value, function (key, value) {
-                            temp = temp.replaceAll('${' + key + '}', value);
-                        });
-                        ProductContainer.append(temp);
+                                        <!-- Product actions-->
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                            <div class="text-center"><button id="addToCart" class="btn btn-outline-dark mt-auto" onclick="AddProductToCart(@item.Id, false)">Add to cart</button></div>
+                                        </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <center>
+                <video controls="controls" autoplay="autoplay">
+                    <source src="~/UploadFiles/Videos/Online-Shopping.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </center>
+        </section>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="~/js/ShoppingCart.js"></script>
+        <script>
+            function searchListener2() {
+                $("#search").on("keyup", function () {
+                    var searched = $(this).val();
+                    var loader = $(this).next();
+                    loader.removeClass('d-none');
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/Index",
+                        data: { 'searchString': searched },
+                        datatype: "html",
+                        success: function () {
+                            //Index to myself if the ajax succeed.
+                            alert('Success');
+                            $('#productsList').html(data);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            alert('Unexpected error.' + textStatus + errorThrown);
+                        }
                     });
-                    loader.addClass('d-none');
                 });
             }
-            );
-        }
-    </script>
 
-    <script type="text/template" id="template">
-        <tr>
-            class="col mb-5">
-            <td class="card h-100">
-                <img class="card-img-top" src="~/UploadFiles/Products/${Image}" alt="..." />
-                <div class="card-body p-4">
-                    <div class="text-center">
-                        ${Name}
-                        <br />
-                        ${Description}
-                        <br />
-                        ${Price}₪
+            function searchListener() {
+                $("#search").on("keyup", function () {
+                    var text = $("#search").val();
+                    var inpSearch = $('#search');//$('input', $(this).parent());//$(this).prev();
+                    var loader = $(this).next();
+                    
+                    loader.removeClass('d-none');
+                    $.ajax({
+                        url: "/Home/SearchJson",
+                        data: { searchString: inpSearch.val() }
+                    }).done(function (result) {
+                        console.log($('ProductContainer'))
+                        $('ProductContainer').html(result);
+                        var ProductContainer = $('ProductContainer');
+                        var template = $('#template').html();
+                        ProductContainer.html('');
+                        $.each(result, function (key, value) {
+                            //tbody.append('<tr><td>' + value.title + '</td><td>' + value.body + '</td></tr>');
+                            var temp = template;
+                            $.each(value, function (key, value) {
+                                temp = temp.replaceAll('${' + key + '}', value);
+                            });
+                            ProductContainer.append(temp);
+                        });
+                        loader.addClass('d-none');
+                    });
+                }
+                );
+            }
+        </script>
+
+        <script type="text/template" id="template">
+            <tr>
+                class="col mb-5">
+                <td class="card h-100">
+                    <img class="card-img-top" src="~/UploadFiles/Products/${image}" alt="..." />
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            ${name}
+                            <br />
+                            ${description}
+                            <br />
+                            ${price}₪
+                        </div>
                     </div>
-                </div>
-                <!-- Product actions-->
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                    <div class="text-center"><button id="addToCart" class="btn btn-outline-dark mt-auto" onclick="AddProductToCart(${Id}, false)">Add to cart</button></div>
-                </div>
-            </td>
-        </tr>
-    </script>
-</body>
+                    <!-- Product actions-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><button id="addToCart" class="btn btn-outline-dark mt-auto" onclick="AddProductToCart(${Id}, false)">Add to cart</button></div>
+                    </div>
+                </td>
+            </tr>
+        </script>
+    </body>
 
 </html>
 <script>
     window.onload = function () {
-        searchListener();
+        searchListener2();
         setInterval(showClock, 1000);
 
         function showClock() {
